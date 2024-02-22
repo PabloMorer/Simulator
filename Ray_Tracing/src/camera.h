@@ -8,8 +8,7 @@
 #include "material.h"
 #include "WriteColor.h"
 #include <iostream>
-#include <iostream>
-#include <direct.h>
+
  
  
 class camera{
@@ -28,11 +27,8 @@ class camera{
         double focus_dist = 10;    // Distance from camera lookfrom point to plane of perfect focus
 
         void render(const hittable& world){
-            initialize();;
-            char buffer[FILENAME_MAX];
-            _getcwd(buffer, FILENAME_MAX);
-            std::string currentDirectory(buffer);
-            std::string fullPath = currentDirectory + "\\" + "image.ppm";
+            initialize();
+            std::string fullPath =   "image.ppm";
             std::ofstream img(fullPath);
             img << "P3\n" << image_width << ' ' <<image_height << "\n255\n";
             for(int j = 0; j < image_height; ++j){
