@@ -7,7 +7,6 @@
 #include "color.h"
 #include "camera.h"
 
-
 class World {
     public:
         World(){};
@@ -18,21 +17,24 @@ class World {
        inline void addHittableList(hittable_list _list){
          this->list = _list;
        }
+       inline void addHitattableDialectricObject(std::vector<double> point, double radius, double fuzz){
+                    point3 p(point);
+                    auto material = make_shared<dielectric>(fuzz);
+                    list.add(make_shared<sphere>(p, radius, material));
+       }
+       
+       inline void addHittableLambertianObject(std::vector<double> point, double radius, std::vector<double> _color){
+                    point3 p(point);
+                    color c(_color);
+                    auto material = make_shared<lambertian>(c);
+                    list.add(make_shared<sphere>(p, radius, material));     
+       }
 
-       inline void addHittableObject(){
-
-        
-            auto ground_material = make_shared<lambertian>(color(0.5, 0.5, 0.5));
-            list.add(make_shared<sphere>(point3(0,-1000,0), 1000, ground_material));
-
-            auto material1 = make_shared<dielectric>(1.5);
-            list.add(make_shared<sphere>(point3(0, 1, 0), 1.0, material1));
-
-            auto material2 = make_shared<lambertian>(color(0.4, 0.2, 0.1));
-            list.add(make_shared<sphere>(point3(-4, 1, 0), 1.0, material2));
-
-            auto material3 = make_shared<metal>(color(0.7, 0.6, 0.5), 0.0);
-            list.add(make_shared<sphere>(point3(4, 1, 0), 1.0, material3));
+       inline void addHittableMetalObject(std::vector<double> point, double radius, std::vector<double> _color, double fuzz ){
+                    point3 p(point);
+                    color c(_color);
+                    auto material = make_shared<metal>(c, fuzz);
+                    list.add(make_shared<sphere>(p, radius, material));
        }
 
        inline void printWorld(){
@@ -52,8 +54,10 @@ class World {
 
             cam.render(this->list);
        }
+
     private:
         hittable_list list;
+    
 };
 
 
